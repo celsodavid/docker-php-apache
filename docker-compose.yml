@@ -1,0 +1,35 @@
+version: "3.1"
+services:
+
+  mysql:
+    image: mysql:5.7
+    container_name: docker-php-72-mysql
+    working_dir: /application
+    volumes:
+      - .:/application
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=mysql
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=root
+    ports:
+      - "33006:3306"
+    networks:
+      - default
+
+  php72:
+    build: phpdocker/php
+    container_name: docker-php-72-php
+    working_dir: /application
+    volumes:
+      - .:/application
+#      - ./phpdocker/php/php-ini-overrides.ini:/etc/php/7.2/conf.d/99-overrides.ini
+      - ./phpdocker/apache/:/etc/apache2/sites-enabled/
+    ports:
+      - "8080:80"
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge
